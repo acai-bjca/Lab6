@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="edu.eci.pdsw.sampleprj.dao.mybatis.mappers.ClienteMapper">
+
+	<select parameterType="map" id="consultarClientes" resultMap="ClienteResult">
+		select    
+		c.nombre as nombre_cliente,
+		c.documento,
+		c.telefono,
+		c.direccion,
+		c.email,
+		c.vetado,
+		
+		ir.id as id_item_rentado,
+		ir.fechainiciorenta ,
+		ir.fechafinrenta ,
+		
+		i.id as id_item,
+		i.nombre as nombre_item,
+		i.descripcion as descripcion_item,
+		i.fechalanzamiento ,
+		i.tarifaxdia ,
+		i.formatorenta ,
+		i.genero ,        
+		ti.id as id_tipo_Item,
+		ti.descripcion as descripcion_tipo_item 
+
+		
+		FROM VI_CLIENTES as c 
+		left join VI_ITEMRENTADO as ir on c.documento=ir.CLIENTES_documento 
+		left join VI_ITEMS as i on ir.ITEMS_id=i.id 
+		left join VI_TIPOITEM as ti on i.TIPOITEM_id=ti.id
+	</select>
+	<resultMap type='Cliente' id='ClienteResult'>
+		<result property='nombre' column='nombre_cliente'/>
+		<result property='documento' column='documentos'/>
+		<result property='telefono' column='telefono'/>  
+		<result property='direccion' column='direccion'/>
+		<result property='email' column='email'/>
+		<result property='vetado' column='vetado'/>
+		<collection property='rentados' ofType='ItemRentado' resultMap='ItemRentadoResult'></collection>
+	</resultMap>
+
+	<resultMap type='ItemRentado' id='ItemRentadoResult'>
+		<id property='id' column='id_item_rentado'/>
+		<result property='fechainiciorenta' column='fechainiciorenta'/>
+		<result property='fechafinrenta' column='fechafinrenta'/>
+	</resultMap>
+
+	<resultMap type='Item' id='ItemResult'>
+		<id property='id' column='id_item'/>
+		<result property='nombre' column='nombre_item'/>
+		<result property='descripcion' column='descripcion_item'/>
+		<result property='fechaLanzamiento' column='fechalanzamiento'/>
+		<result property='tarifaxDia' column='tarifaxdia'/>
+		<result property='formatoRenta' column='formatorenta'/>
+		<result property='genero' column='genero'/>
+	</resultMap>
+    
+	<resultMap type='TipoItem' id='TipoItemResult'>
+		<id property='id' column='id_tipo_Item'/>
+		<result property='descripcion' column='descripcion_tipo_item'/> 
+	</resultMap>
+</mapper>
